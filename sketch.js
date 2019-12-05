@@ -1,10 +1,6 @@
-/* 
-Based on Dan Shiffman's video 6.5 p5.js Adding Removing Objects 
-Code for https://vimeo.com/channels/learningp5js/141211392
-Concepts introducing push(), splice() 1:30
-*/
 
-var bubbles = [];
+
+var snake = [];
 var apple;
 var targets = [];
 var maxLen;
@@ -13,6 +9,11 @@ var Target;
 var hi_score
 var play;
 var score;
+
+var col= 50;
+var c= 100;
+var d= 50;
+
 
 function preload() {
   apple = loadImage('media/apple.png');
@@ -29,18 +30,18 @@ function setup() {
   score = 0;
 }
 
-// TASK 2a - Try changing mouseClicked() to mouseMoved().  What happens?
-// TASK 2b - Try changing mouseMoved() to mouseDragged().  What's different?
 function mouseMoved() {
-  bubblesAndApples();
+  snakeAndApples();
 }
 
 function mouseDragged() {
-  bubblesAndApples();
+  snakeAndApples();
 }
 
 function draw() {
-  background(0);
+  
+  col,c,d = mouseX/3;
+  background (col,c,d);
   showScore();
   for (var i = 0; i < targets.length; i++) {
     targets[i].display();
@@ -50,10 +51,10 @@ function draw() {
     textSize(20);
     fill(255);
     noStroke();
-    text("Move your mouse around to drag the bubbles.", 100, 100);
-    text("\"Eat\" the apples to get more bubbles.", 100, 130);
-    text("Don't crash into your own bubbles.", 100, 160);
-    text("If you go out of bounds, game over!", 100, 190);
+    text("Move your mouse to move the snake.", 100, 100);
+    text("\"Eat\" the apples to make your snake grow.", 100, 130);
+    text("If you crash your snake into the walls, GAME OVER!", 100, 160);
+   
 
     if (mouseX > 0 || mouseY > 0) {
       play = 1;
@@ -61,12 +62,12 @@ function draw() {
 
   } else if (play == 1) {
 
-    for (var i = 0; i < bubbles.length; i++) {
-      bubbles[i].move();
-      bubbles[i].display();
-      if (maxLen > 30 && i < (maxLen - minLen) && bubbles[i].cut()) {
-        bubbles.splice(0, i);
-        maxLen = bubbles.length;
+    for (var i = 0; i < snake.length; i++) {
+      snake[i].move();
+      snake[i].display();
+      if (maxLen > 30 && i < (maxLen - minLen) && snake[i].cut()) {
+        snake.splice(0, i);
+        maxLen = snake.length;
       }
     }
 
@@ -93,16 +94,12 @@ function showScore() {
   text("Hi Score: " + hi_score, 310, 20);
 }
 
-function bubblesAndApples() {
-  bubbles.push(new Bubble(mouseX, mouseY));
+function snakeAndApples() {
+  snake.push(new Snake(mouseX, mouseY));
 
-  // TASK 3 - There are too many bubbles! Use:
-  //          bubbles.splice(0,1);
-  //          to splice or cut out the first bubble in the array
-  //          IF there are too many (you decide what too many is).
-  //          Uncomment the line below to start.
-  if (bubbles.length > maxLen)
-    bubbles.splice(0, 1);
+  
+  if (snake.length > maxLen)
+    snake.splice(0, 1);
 
   for (var i = 0; i < targets.length; i++) {
     if (targets[i].edible() <= 10) {
@@ -113,8 +110,7 @@ function bubblesAndApples() {
   }
 }
 
-// TASK 1 - Add parameters so the bubbles appear where the mouse is clicked
-function Bubble(x, y) {
+function Snake(x, y) {
   this.x = x;
   this.y = y;
 
