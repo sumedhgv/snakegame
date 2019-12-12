@@ -1,5 +1,3 @@
-
-
 var snake = [];
 var apple;
 var targets = [];
@@ -39,7 +37,7 @@ function mouseDragged() {
 }
 
 function draw() {
-  
+
   col,c,d = mouseX/3;
   background (col,c,d);
   showScore();
@@ -54,7 +52,7 @@ function draw() {
     text("Move your mouse to move the snake.", 100, 100);
     text("\"Eat\" the apples to make your snake grow.", 100, 130);
     text("If you crash your snake into the walls, GAME OVER!", 100, 160);
-   
+
 
     if (mouseX > 0 || mouseY > 0) {
       play = 1;
@@ -97,7 +95,7 @@ function showScore() {
 function snakeAndApples() {
   snake.push(new Snake(mouseX, mouseY));
 
-  
+
   if (snake.length > maxLen)
     snake.splice(0, 1);
 
@@ -105,6 +103,7 @@ function snakeAndApples() {
     if (targets[i].edible() <= 10) {
       targets.splice(i, 1);
       maxLen += 5;
+      targets.push(new Target());
       targets.push(new Target());
     }
   }
@@ -135,6 +134,8 @@ function Snake(x, y) {
 }
 
 function Target() {
+
+
   this.x = random(20, width - 20);
   this.y = random(20, height - 20);
 
